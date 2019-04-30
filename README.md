@@ -22,7 +22,7 @@
 
 引入的时候一定要去掉api里的dubbo
 
-![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2kghhr5ouj20a804paad.jpg)
+![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2kigmk3v9j209e04pdg4.jpg)
 
 url是dubbo-admin里的url
 ![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2khc9tt2sj21g504n75e.jpg)

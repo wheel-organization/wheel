@@ -15,7 +15,7 @@ public class DubboGenericInvoker {
 
     /**
      * 根据提供url泛化调用
-     * url格式示例:dubbo://127.0.0.1:20880/com.xxx.DemoService?application=delivery-order-platform&default.token=souche_http_token&interface=com.xxx.DemoService&group=xxx
+     * url格式示例:dubbo://127.0.0.1:20880/com.xxx.DemoService?application=default-application&default.token=xxx&interface=com.xxx.DemoService&group=xxx
      * params顺序必须和方法的参数顺序相同，内容为序列化后的字符串
      *
      * @param url

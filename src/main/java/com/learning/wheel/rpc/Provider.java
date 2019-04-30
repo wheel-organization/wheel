@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 public class Provider {
 
     /**
-     * 应用名，取不到默认为lease-platform-delivery
+     * 应用名，取不到默认为default-application
      */
     private String application;
 
