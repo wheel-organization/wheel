@@ -24,8 +24,14 @@
 
 ![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2kghhr5ouj20a804paad.jpg)
 
+url是dubbo-admin里的url
+![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2khc9tt2sj21g504n75e.jpg)
+
 1. 配合swagger
 ![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2kf99yvwsj20u704iq3s.jpg)
 ![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2kfhjn68hj21mm0ycgpn.jpg)
 2. 代码单测调用
 ![](http://ww1.sinaimg.cn/large/ee36fa1bly1g2kfcy6l6mj20nd047whd.jpg)
+
+### 大致说明
+大体思路就是反射+泛化调用。有点造轮子了，具体实现代码里注释写的还算详细，有问题和建议欢迎提到Issues上。
