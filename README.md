@@ -51,18 +51,24 @@ hibernate-validator是Hibernate项目中的一个数据校验框架，是Bean Va
 > damascus中已经引入了需要的api，无需重复引入
 
 ``` 
-<dependency>
-    <groupId>javax.validation</groupId>
-    <artifactId>validation-api</artifactId>
-    <version>1.0.0.GA</version>
-</dependency>
-<dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-validator</artifactId>
-    <version>4.2.0.Final</version>
-</dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.16.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.1-b09</version>
+            <scope>provided</scope>
+        </dependency>
 ```
-在要校验的POJO上加上以下注解即可
+在要校验的POJO上加上以下注解即可（注解支持类型在注解源码的注释上有）
 
 
 注解 | 用途
@@ -72,7 +78,7 @@ AssertFalse | 用于boolean字段，该字段的值只能为false
 AssertTrue | 用于boolean字段，该字段只能为true 
 DecimalMax(value) | 被注释的元素必须是一个数字，只能大于或等于该值
 DecimalMin(value) | 被注释的元素必须是一个数字，只能小于或等于该值
-Digits(integer,fraction) | 检查是否是一种数字的(整数,小数)的位数
+Digits(integer,fraction) | 检查是否是一种数字的(整数最大位,小数最大位)位数
 Future | 检查该字段的日期是否是属于将来的日期
 Past | 检查该字段的日期是在过去
 Max(value) | 该字段的值只能小于或等于该值
@@ -113,7 +119,7 @@ URL(protocol=,host=,port=,regexp=,flags=) | 被注释的字符串必须是一个
 ValidResult validResult = ValidationUtil.validate(obj);
 ```
 ValidResult大致结构：
-```
+```java
     /**
      * 是否通过校验
      */
@@ -165,3 +171,65 @@ ValidResult大致结构：
         return String.format("%s:%s", this.paramName, this.paramError);
     }
 ```
+
+### 样例
+
+```java
+
+public class ParamTestDTO implements Serializable {
+
+    private static final long serialVersionUID = 7123882542534668217L;
+
+    @AssertTrue(message = "Error True")
+    private Boolean testTrue;
+
+    @AssertFalse(message = "Error False")
+    private Boolean testFalse;
+
+    @DecimalMax(value = "10", message = "Error StrMax")
+    private String testStrMax;
+
+    @DecimalMin(value = "1", message = "Error StrMin")
+    private String testStrMin;
+
+    @Max(value = 10, message = "Error Max")
+    private Integer testMax;
+
+    @Min(value = 1, message = "Error Min")
+    private Double testMin;
+
+    @Digits(integer = 2, fraction = 3, message = "Error Dig")
+    private BigDecimal testDig;
+
+    @Past(message = "Error Past")
+    private Date testPast;
+
+    @Future(message = "Error Future")
+    private Date testFuture;
+
+    @Null(message = "Error Null")
+    private String testNull;
+
+    @NotNull(message = "Error NonNull")
+    private String testNonNull;
+
+    @Pattern(regexp = "^[0-9]?[0-9]$", message = "Error Pattern")
+    private String testPattern;
+
+    @Size(min = 1, max = 10, message = "Error Size")
+    private List<String> testSize;
+
+    @Length(min = 1, max = 10, message = "Error Length")
+    private String testLength;
+
+    @NotBlank(message = "Error Blank")
+    private String testBlank;
+
+    @NotEmpty(message = "Error NotEmpty")
+    private String testEmpty;
+
+    @Range(min = 1, max = 10, message = "Error Range")
+    private String testRange;
+}
+```
+**单测：ValidationUtilTest**
