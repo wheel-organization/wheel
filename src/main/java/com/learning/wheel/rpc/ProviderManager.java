@@ -38,6 +38,10 @@ public class ProviderManager {
         URL u = URL.valueOf(url);
         //获取所有注册中心地址
         String[] zkUrls = zkUrl.split(";");
+        //没有注册中心用直连的方式去调用
+        if (zkUrls.length == 0) {
+            zkUrls = new String[]{"N/A"};
+        }
         List<Provider> providerList = new ArrayList<>();
         for (String zk : zkUrls) {
             //build provider
