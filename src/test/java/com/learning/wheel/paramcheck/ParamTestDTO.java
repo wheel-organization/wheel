@@ -30,6 +30,7 @@ import java.util.List;
  */
 public class ParamTestDTO implements Serializable {
 
+
     private static final long serialVersionUID = 7123882542534668217L;
 
     @AssertTrue(message = "Error True")
@@ -83,6 +84,10 @@ public class ParamTestDTO implements Serializable {
     @Range(min = 1, max = 10, message = "Error Range")
     private String testRange;
 
+    @NotEmpty(message = "Error Empty")
+    @Length(min = 1, max = 5, message = "Error Length")
+    private String testAnnotations;
+
     /**
      * 构建正常参数
      */
@@ -106,6 +111,7 @@ public class ParamTestDTO implements Serializable {
         this.testBlank = "11";
         this.testEmpty = "11";
         this.testRange = "2";
+        this.testAnnotations = "22";
     }
 
     public Boolean getTestTrue() {
@@ -242,5 +248,13 @@ public class ParamTestDTO implements Serializable {
 
     public void setTestRange(String testRange) {
         this.testRange = testRange;
+    }
+
+    public String getTestAnnotations() {
+        return testAnnotations;
+    }
+
+    public void setTestAnnotations(String testAnnotations) {
+        this.testAnnotations = testAnnotations;
     }
 }
