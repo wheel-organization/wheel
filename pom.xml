@@ -99,7 +99,6 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
             <version>3.0.1-b09</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
