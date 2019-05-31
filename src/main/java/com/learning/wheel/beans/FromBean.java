@@ -1,5 +1,8 @@
 package com.learning.wheel.beans;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author hangwei
  * @date 2019/5/14 下午 3:04
@@ -10,6 +13,8 @@ public class FromBean {
     private String address;
     private String idno;
     private double money;
+    private List<String> freid;
+    private Map<String,Integer> freidMap;
 
     public double getMoney() {
         return money;
@@ -51,4 +56,19 @@ public class FromBean {
         this.idno = idno;
     }
 
+    public List<String> getFreid() {
+        return freid;
+    }
+
+    public void setFreid(List<String> freid) {
+        this.freid = freid;
+    }
+
+    public Map<String, Integer> getFreidMap() {
+        return freidMap;
+    }
+
+    public void setFreidMap(Map<String, Integer> freidMap) {
+        this.freidMap = freidMap;
+    }
 }

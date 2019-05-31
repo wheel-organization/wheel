@@ -1,11 +1,15 @@
 package com.learning.wheel.beans;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import java.util.Map;
 
 
 /**
@@ -24,6 +28,11 @@ public class TestMain {
         fb.setMoney(30000.111);
         fb.setIdno("110330219879208733");
         fb.setName("测试");
+        fb.setFreid(Lists.newArrayList("shgs","sajs","suha"));
+        Map<String,Integer> map = Maps.newHashMap();
+        map.put("sjka",1);
+        map.put("sjkj",2);
+        fb.setFreidMap(map);
 
         IMethodCallBack beanutilCB = new IMethodCallBack() {
 
@@ -91,24 +100,24 @@ public class TestMain {
 
         // 数量较少的时候，测试性能
         BenchmarkTest bt = new BenchmarkTest(10);
-        bt.benchmark(propertyCB, fb);
-        bt.benchmark(springCB, fb);
-        bt.benchmark(cglibCB, fb);
+//        bt.benchmark(propertyCB, fb);
+//        bt.benchmark(springCB, fb);
+//        bt.benchmark(cglibCB, fb);
         bt.benchmark(beanutilCB, fb);
 
-        // 测试一万次性能测试
-        BenchmarkTest bt10000 = new BenchmarkTest(10000);
-        bt10000.benchmark(propertyCB, fb);
-        bt10000.benchmark(springCB, fb);
-        bt10000.benchmark(cglibCB, fb);
-        bt10000.benchmark(beanutilCB, fb);
-
-        // 担心因为顺序问题影响测试结果
-        BenchmarkTest bt1000R = new BenchmarkTest(10000);
-        bt1000R.benchmark(cglibCB, fb);
-        bt1000R.benchmark(springCB, fb);
-        bt1000R.benchmark(propertyCB, fb);
-        bt1000R.benchmark(beanutilCB, fb);
+//        // 测试一万次性能测试
+//        BenchmarkTest bt10000 = new BenchmarkTest(10000);
+//        bt10000.benchmark(propertyCB, fb);
+//        bt10000.benchmark(springCB, fb);
+//        bt10000.benchmark(cglibCB, fb);
+//        bt10000.benchmark(beanutilCB, fb);
+//
+//        // 担心因为顺序问题影响测试结果
+//        BenchmarkTest bt1000R = new BenchmarkTest(10000);
+//        bt1000R.benchmark(cglibCB, fb);
+//        bt1000R.benchmark(springCB, fb);
+//        bt1000R.benchmark(propertyCB, fb);
+//        bt1000R.benchmark(beanutilCB, fb);
 
     }
 
