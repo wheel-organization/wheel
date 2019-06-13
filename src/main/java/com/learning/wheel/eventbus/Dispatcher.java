@@ -83,6 +83,11 @@ abstract class Dispatcher {
                 };
 
         /** Per-thread dispatch state, used to avoid reentrant event dispatching. */
+        /**
+         * 为了防止线程重复发布事件，即多次递归调用了post(...)方法
+         * 在第一次进入的时候，将dispatching变量设置true，下次就不会再重入进来。
+         * 该模型保证了同一线程下事件是按序发布的，而且当一个事件的订阅者都接收到消息时，才会发布下一个事件。
+         */
         private final ThreadLocal<Boolean> dispatching =
                 new ThreadLocal<Boolean>() {
                     @Override
@@ -91,6 +96,7 @@ abstract class Dispatcher {
                     }
                 };
 
+        //广度优先的策略
         @Override
         void dispatch(Object event, Iterator<Subscriber> subscribers) {
             checkNotNull(event);
@@ -150,6 +156,7 @@ abstract class Dispatcher {
         private final ConcurrentLinkedQueue<EventWithSubscriber> queue =
                 Queues.newConcurrentLinkedQueue();
 
+        //属于一种均衡策略，多线程
         @Override
         void dispatch(Object event, Iterator<Subscriber> subscribers) {
             checkNotNull(event);
@@ -175,6 +182,7 @@ abstract class Dispatcher {
     }
 
     /** Implementation of {@link #immediate()}. */
+    //同步模式
     private static final class ImmediateDispatcher extends Dispatcher {
         private static final ImmediateDispatcher INSTANCE = new ImmediateDispatcher();
 

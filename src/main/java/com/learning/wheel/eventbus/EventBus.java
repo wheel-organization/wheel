@@ -31,11 +31,25 @@ public class EventBus {
 
     private static final Logger logger = Logger.getLogger(EventBus.class.getName());
 
+    /**
+     * 事件的标识
+     */
     private final String identifier;
+    /**
+     * 事件的执行器
+     */
     private final Executor executor;
+    /**
+     * 处理事件执行时抛出的异常
+     */
     private final SubscriberExceptionHandler exceptionHandler;
-
+    /**
+     * 订阅者注册表
+     */
     private final SubscriberRegistry subscribers = new SubscriberRegistry(this);
+    /**
+     * 事件分发器
+     */
     private final Dispatcher dispatcher;
 
     /** Creates a new EventBus named "default". */
@@ -52,6 +66,7 @@ public class EventBus {
     public EventBus(String identifier) {
         this(
                 identifier,
+                //单例的线程执行器
                 MoreExecutors.directExecutor(),
                 Dispatcher.perThreadDispatchQueue(),
                 LoggingHandler.INSTANCE);
@@ -146,6 +161,7 @@ public class EventBus {
             dispatcher.dispatch(event, eventSubscribers);
         } else if (!(event instanceof DeadEvent)) {
             // the event had no subscribers and was not itself a DeadEvent
+            //可以理解对未找到订阅者的事件统一封装成DeadEvent做统一处理
             post(new DeadEvent(this, event));
         }
     }

@@ -63,6 +63,7 @@ class Subscriber {
         this.executor = bus.executor();
     }
 
+    //核心方法
     /** Dispatches {@code event} to this subscriber using the proper executor. */
     final void dispatchEvent(final Object event) {
         executor.execute(
@@ -72,6 +73,7 @@ class Subscriber {
                         try {
                             invokeSubscriberMethod(event);
                         } catch (InvocationTargetException e) {
+                            //异常处理
                             bus.handleSubscriberException(e.getCause(), context(event));
                         }
                     }
@@ -103,6 +105,7 @@ class Subscriber {
         return new SubscriberExceptionContext(bus, event, target, method);
     }
 
+    //重写equals和hashCode 并以final修饰，避免同一个对象对相同的事件重复订阅
     @Override
     public final int hashCode() {
         return (31 + method.hashCode()) * 31 + System.identityHashCode(target);
@@ -124,6 +127,7 @@ class Subscriber {
      * Checks whether {@code method} is thread-safe, as indicated by the presence of the {@link
      * AllowConcurrentEvents} annotation.
      */
+    //事件并发执行使用这@AllowConCurrentEvents
     private static boolean isDeclaredThreadSafe(Method method) {
         return method.getAnnotation(AllowConcurrentEvents.class) != null;
     }
@@ -132,6 +136,7 @@ class Subscriber {
      * Subscriber that synchronizes invocations of a method to ensure that only one thread may enter
      * the method at a time.
      */
+
     @VisibleForTesting
     static final class SynchronizedSubscriber extends Subscriber {
 

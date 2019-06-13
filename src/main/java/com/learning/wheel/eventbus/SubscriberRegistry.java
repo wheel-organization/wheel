@@ -77,11 +77,12 @@ final class SubscriberRegistry {
         for (Entry<Class<?>, Collection<Subscriber>> entry : listenerMethods.asMap().entrySet()) {
             Class<?> eventType = entry.getKey();
             Collection<Subscriber> eventMethodsInListener = entry.getValue();
-
+            //从并发map中获取事件对应的订阅者集合
             CopyOnWriteArraySet<Subscriber> eventSubscribers = subscribers.get(eventType);
 
             if (eventSubscribers == null) {
                 CopyOnWriteArraySet<Subscriber> newSet = new CopyOnWriteArraySet<>();
+                //考虑并发的情况，使用concurrentMap的putIfAbsent 键值对如果是新键值对,返回null,如果已存在不做put操作,返回value
                 eventSubscribers =
                         MoreObjects.firstNonNull(subscribers.putIfAbsent(eventType, newSet), newSet);
             }
@@ -99,6 +100,7 @@ final class SubscriberRegistry {
             Collection<Subscriber> listenerMethodsForType = entry.getValue();
 
             CopyOnWriteArraySet<Subscriber> currentSubscribers = subscribers.get(eventType);
+            //判断监听器是否被注册，移除订阅的同时还是去校验是否有未被注册的订阅方法
             if (currentSubscribers == null || !currentSubscribers.removeAll(listenerMethodsForType)) {
                 // if removeAll returns true, all we really know is that at least one subscriber was
                 // removed... however, barring something very strange we can assume that if at least one
@@ -122,6 +124,7 @@ final class SubscriberRegistry {
      * Gets an iterator representing an immutable snapshot of all subscribers to the given event at
      * the time this method is called.
      */
+    //获取事件的所有订阅者迭代器
     Iterator<Subscriber> getSubscribers(Object event) {
         ImmutableSet<Class<?>> eventTypes = flattenHierarchy(event.getClass());
 
@@ -145,6 +148,7 @@ final class SubscriberRegistry {
      * instances of this class; this greatly improves performance if multiple EventBus instances are
      * created and objects of the same class are registered on all of them.
      */
+    //static final 所有eventBus共享一个，线程安全
     private static final LoadingCache<Class<?>, ImmutableList<Method>> subscriberMethodsCache =
             CacheBuilder.newBuilder()
                     .weakKeys()
@@ -159,6 +163,7 @@ final class SubscriberRegistry {
     /**
      * Returns all subscribers for the given listener grouped by the type of event they subscribe to.
      */
+    //获取监听者的所有订阅方法，key是事件类型，value是订阅者集合
     private Multimap<Class<?>, Subscriber> findAllSubscribers(Object listener) {
         Multimap<Class<?>, Subscriber> methodsInListener = HashMultimap.create();
         Class<?> clazz = listener.getClass();
@@ -170,11 +175,13 @@ final class SubscriberRegistry {
         return methodsInListener;
     }
 
+    //从本地缓存中获取订阅方法的不可变集合
     private static ImmutableList<Method> getAnnotatedMethods(Class<?> clazz) {
         return subscriberMethodsCache.getUnchecked(clazz);
     }
 
     private static ImmutableList<Method> getAnnotatedMethodsNotCached(Class<?> clazz) {
+        //获取监听器，监听器的父类以及实现接口的类型集合
         Set<? extends Class<?>> supertypes = TypeToken.of(clazz).getTypes().rawTypes();
         Map<MethodIdentifier, Method> identifiers = Maps.newHashMap();
         for (Class<?> supertype : supertypes) {
@@ -190,6 +197,7 @@ final class SubscriberRegistry {
                             parameterTypes.length);
 
                     MethodIdentifier ident = new MethodIdentifier(method);
+                    //如果有同名同参方法，只保存当前监听器的方法，不保存其父类方法
                     if (!identifiers.containsKey(ident)) {
                         identifiers.put(ident, method);
                     }
@@ -218,6 +226,7 @@ final class SubscriberRegistry {
      * Flattens a class's type hierarchy into a set of {@code Class} objects including all
      * superclasses (transitively) and all interfaces implemented by these superclasses.
      */
+    //从本地缓存取事件，事件父类，实现接口的类型
     @VisibleForTesting
     static ImmutableSet<Class<?>> flattenHierarchy(Class<?> concreteClass) {
         try {
