@@ -46,9 +46,9 @@ public class ProviderManager {
         for (String zk : zkUrls) {
             //build provider
             Provider provider = new Provider(u.getParameter("application", "default-application"), u.getPath(), u.getAddress(), zk);
-            provider.setToken(u.getParameter("default.token"));
-            provider.setGroup(u.getParameter("group"));
-            provider.setVersion(u.getParameter("version"));
+            provider.setToken(u.getParameter("token") == null ? u.getParameter("default.token") : u.getParameter("token"));
+            provider.setGroup(u.getParameter("group") == null ? u.getParameter("default.group") : u.getParameter("group"));
+            provider.setVersion(u.getParameter("version") == null ? u.getParameter("default.version") : u.getParameter("version"));
 
             providerList.add(provider);
         }
