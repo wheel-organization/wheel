@@ -69,27 +69,6 @@ final public class EventBusTest {
         }
     }
 
-    private static class EventListenerB{
-        @Subscribe
-        public void onEvent(EventA e){
-            System.out.println("B订阅的是A事件，接收到："+e);
-        }
-        @Subscribe
-        public void onEvent(EventC e) {
-            System.out.println("B订阅的是C事件,接收到:" + e);
-        }
-    }
-
-    private static class EventListenerC{
-        @Subscribe
-        public void onEvent(EventA e){
-            System.out.println("C订阅的是A事件，接收到："+e);
-        }
-        @Subscribe
-        public void onEvent(EventC e) {
-            System.out.println("C订阅的是C事件,接收到:" + e);
-        }
-    }
 
     public static void main(String[] args) throws InterruptedException {
         EventBus eb = new EventBus();
