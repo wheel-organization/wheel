@@ -75,5 +75,4 @@ public class CompletableTest {
 
         TimeUnit.SECONDS.sleep(2);
     }
-
 }
